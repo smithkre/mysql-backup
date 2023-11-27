@@ -20,7 +20,7 @@ for db in $databases; do
     mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD --databases $db > "${backup_dir}/${db}.sql"
 
     # Upload to DigitalOcean Spaces
-    aws s3 cp "${backup_dir}/${db}.sql" s3://$AWS_BUCKET/backup/${today}/${db}.sql --endpoint-url https://$S3_ENDPOINT
+    aws s3 cp "${backup_dir}/${db}.sql" s3://$AWS_BUCKET/${backup_dir}/${db}.sql --endpoint-url https://$S3_ENDPOINT
 done
 
 # Delete local backup files after upload
@@ -28,4 +28,4 @@ rm -rf "${backup_dir}"
 
 # Delete backups older than 60 days from DigitalOcean Spaces
 older_than=$(date --date="60 days ago" +%Y%m%d)
-aws s3 rm s3://$AWS_BUCKET/backup --recursive --endpoint-url https://$S3_ENDPOINT --exclude "*" --include "${older_than}/*"
+aws s3 rm s3://$AWS_BUCKET/$backup_base --recursive --endpoint-url https://$S3_ENDPOINT --exclude "*" --include "${older_than}/*"
