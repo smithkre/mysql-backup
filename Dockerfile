@@ -1,6 +1,6 @@
-FROM mysql:latest
+FROM mysql:8.0-debian
 
-# Install AWS CLI to interact with DigitalOcean Spaces
+# Install MySQL and AWS CLI
 RUN apt-get update && \
     apt-get install -y awscli && \
     rm -rf /var/lib/apt/lists/*
