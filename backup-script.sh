@@ -18,9 +18,9 @@ databases=$(mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATAB
 for db in $databases; do
     echo "Dumping database: $db"
     mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD --databases $db > "${backup_dir}/${db}.sql"
-
+    tar -czvf "${backup_dir}/${db}.sql.tar.gz" -C "${backup_dir}" "${db}.sql"
     # Upload to DigitalOcean Spaces
-    aws s3 cp "${backup_dir}/${db}.sql" s3://$AWS_BUCKET${backup_dir}/${db}.sql --endpoint-url https://$S3_ENDPOINT
+    aws s3 cp "${backup_dir}/${db}.sql.tar.gz" s3://$AWS_BUCKET${backup_dir}/${db}.sql.tar.gz --endpoint-url https://$S3_ENDPOINT
 done
 
 # Delete local backup files after upload

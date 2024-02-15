@@ -2,7 +2,7 @@ FROM mysql:8.0-debian
 
 # Install MySQL and AWS CLI
 RUN apt-get update && \
-    apt-get install -y awscli && \
+    apt-get install -y awscli tar && \
     rm -rf /var/lib/apt/lists/*
 
 # Add your backup script
